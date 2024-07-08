@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const historyList = document.getElementById('historyList');
     const resetMessageElement = document.getElementById('resetMessage');
     const resetHaulButton = document.getElementById('resetHaulButton');
+    const progressBar = document.getElementById('progressBar');
+
+    const modal = document.getElementById('confirmationModal');
+    const modalText = document.getElementById('confirmationText');
+    const confirmButton = document.getElementById('confirmButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const closeModal = document.querySelector('.close');
 
     nisabElement.textContent = nisabThreshold.toFixed(2);
 
@@ -74,7 +81,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         document.querySelectorAll('button.delete').forEach(button => {
-            button.addEventListener('click', deleteEntry);
+            button.addEventListener('click', function(event) {
+                showModal('Are you sure you want to delete this entry?', function() {
+                    deleteEntry(event);
+                });
+            });
         });
     }
 
@@ -91,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let history = JSON.parse(localStorage.getItem('zakatHistory')) || [];
         const eligibleMonths = countEligibleMonths(history);
         haulMonthsElement.textContent = eligibleMonths;
+        progressBar.style.width = (eligibleMonths / 12) * 100 + '%';
 
         if (eligibleMonths >= 12) {
             zakatEligibilityElement.style.display = 'block';
@@ -122,9 +134,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     resetHaulButton.addEventListener('click', function() {
-        resetHaul();
-        resetMessageElement.style.display = 'block';
+        showModal('Are you sure you want to reset the haul? This action cannot be undone.', function() {
+            resetHaul();
+            resetMessageElement.style.display = 'block';
+        });
     });
+
+    function showModal(message, onConfirm) {
+        modalText.textContent = message;
+        modal.style.display = 'block';
+        confirmButton.onclick = function() {
+            onConfirm();
+            modal.style.display = 'none';
+        };
+        cancelButton.onclick = function() {
+            modal.style.display = 'none';
+        };
+        closeModal.onclick = function() {
+            modal.style.display = 'none';
+        };
+    }
 
     renderHistory();
     updateHaulStatus();
