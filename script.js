@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetMessageElement = document.getElementById('resetMessage');
     const resetHaulButton = document.getElementById('resetHaulButton');
     const progressBar = document.getElementById('progressBar');
+    const belowNisabWarning = document.getElementById('belowNisabWarning');
 
     const modal = document.getElementById('confirmationModal');
     const modalText = document.getElementById('confirmationText');
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = document.querySelector('.close');
 
     nisabElement.textContent = nisabThreshold.toFixed(2);
+    document.getElementById('date').value = new Date().toISOString().slice(0, 7);
 
     form.addEventListener('input', function() {
         const savings = parseFloat(document.getElementById('savings').value) || 0;
@@ -28,6 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalAssets = savings + stocks + gold;
         totalAssetsElement.value = totalAssets.toFixed(2);
+
+        if (totalAssets < nisabThreshold) {
+            totalAssetsElement.style.fontWeight = 'bold';
+            totalAssetsElement.style.color = 'red';
+            belowNisabWarning.style.display = 'block';
+        } else {
+            totalAssetsElement.style.fontWeight = 'normal';
+            totalAssetsElement.style.color = 'black';
+            belowNisabWarning.style.display = 'none';
+        }
     });
 
     form.addEventListener('submit', function(event) {

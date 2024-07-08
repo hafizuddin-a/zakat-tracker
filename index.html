@@ -13,6 +13,8 @@
     <main>
         <section>
             <h2>Input Assets</h2>
+            <p>Enter your assets for the current month to track your Zakat eligibility.</p>
+            <p><strong>Nisab:</strong> $<span id="nisab">4000.00</span></p>
             <form id="assetForm">
                 <label for="date">Date:</label>
                 <input type="month" id="date" name="date" required><br>
@@ -24,6 +26,7 @@
                 <input type="number" id="gold" name="gold" step="0.01" required><br>
                 <label for="total">Total:</label>
                 <input type="text" id="total" name="total" readonly><br>
+                <p id="belowNisabWarning" style="display: none; color: red; font-weight: bold;">Warning: Total assets are below the nisab. The haul will be reset.</p>
                 <input type="submit" value="Submit">
             </form>
         </section>
@@ -36,7 +39,7 @@
             <p id="zakatEligibility" style="display: none;">
                 You are eligible to pay Zakat. <br>
                 Lowest Total Amount During Haul: $<span id="lowestTotal">0.00</span><br>
-                Nisab: $<span id="nisab">4000.00</span><br>
+                Nisab: $<span id="nisabDisplay">4000.00</span><br>
                 Amount of Zakat to be Paid: $<span id="zakatAmount">0.00</span><br>
                 <button id="resetHaulButton">I have paid my Zakat</button>
             </p>
